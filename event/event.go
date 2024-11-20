@@ -1,5 +1,10 @@
 package event
 
+import (
+	"fmt"
+	"time"
+)
+
 type EventTimes struct {
 	Name      string
 	StartTime string
@@ -28,4 +33,14 @@ type EventType struct {
 	Times      []EventTimes
 	Resources  []ResourceType
 	Tags       []TagsType
+}
+
+func FetchEvents() {
+	year, month, day := time.Now().Add(-72 * time.Hour).Date()
+	fmt.Println(year, month, day)
+	// resp, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
+	// fmt.Println(resp)
 }
