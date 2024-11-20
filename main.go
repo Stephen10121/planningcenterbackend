@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Stephen10121/planningcenterbackend/event"
 	"github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
@@ -24,7 +25,32 @@ func main() {
 		if password != initializers.Password {
 			return c.Redirect("/login")
 		}
-		return c.SendString("Hello, World!")
+
+		events := []event.EventType{
+			{
+				InstanceId: "123",
+				StartTime:  "string",
+				EndTime:    "string",
+				Name:       "string",
+				Location:   "string",
+				Times:      []event.EventTimes{},
+				Resources:  []event.ResourceType{},
+				Tags:       []event.TagsType{},
+			},
+			{
+				InstanceId: "124",
+				StartTime:  "string",
+				EndTime:    "string",
+				Name:       "string",
+				Location:   "string",
+				Times:      []event.EventTimes{},
+				Resources:  []event.ResourceType{},
+				Tags:       []event.TagsType{},
+			},
+		}
+		return c.Render("index", fiber.Map{
+			"Events": events,
+		})
 	})
 
 	app.Get("/login", func(c *fiber.Ctx) error {
