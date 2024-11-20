@@ -13,7 +13,10 @@
 	</head>
 	<body>
         <main>
-            <form method="POST">
+            {{if .Error}}
+                <p>{{ .Error }}</p>
+            {{end}}
+            <form method="POST" action="/login">
                 <label class=" svelte-flns1k">
                     <div class="border svelte-flns1k">
                         <input required name="password" type="password" placeholder="Password" autocomplete="off" />
