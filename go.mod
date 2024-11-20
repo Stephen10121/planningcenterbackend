@@ -15,6 +15,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.0.0-beta.3
 	github.com/gofiber/template/html/v2 v2.1.2
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/joho/godotenv v1.5.1
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

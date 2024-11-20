@@ -1,24 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/template/html/v2"
 )
 
 func main() {
-	engine := html.New("./templates", ".html")
+	initializers.SetupEnv()
 
+	engine := html.New("./templates", ".html")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		fmt.Println(c.Cookies("password"))
+		password := c.Cookies("password")
+		if password != initializers.Password {
+			c.Redirect("/login")
+		}
 		return c.SendString("Hello, World!")
 	})
 
