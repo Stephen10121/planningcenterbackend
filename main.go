@@ -26,6 +26,7 @@ func main() {
 			return c.Redirect("/login")
 		}
 
+		//Test data. Will change later.
 		events := []event.EventType{
 			{
 				InstanceId: "123",
