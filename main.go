@@ -32,7 +32,7 @@ func main() {
 		return nil
 	})
 
-	log.Println("Server started on: http://localhost:3001")
+	log.Println("Server started on: http://localhost:8090")
 	if err := pocketbase.Start(); err != nil {
 		log.Fatal(err)
 	}
