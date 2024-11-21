@@ -7,8 +7,7 @@ import (
 )
 
 var Password string
-var AppId string
-var AppSecret string
+var Credentials string
 
 func SetupEnv() {
 	envFile, _ := godotenv.Read(".env")
@@ -21,19 +20,11 @@ func SetupEnv() {
 		log.Fatalln("CAL_PASSWORD env variable is not set.")
 	}
 
-	appId := envFile["APP_ID"]
+	cred := envFile["CREDENTIALS"]
 
-	if len(appId) != 0 {
-		AppId = appId
+	if len(cred) != 0 {
+		Credentials = cred
 	} else {
-		log.Fatalln("APP_ID env variable is not set.")
-	}
-
-	appSecret := envFile["APP_SECRET"]
-
-	if len(appSecret) != 0 {
-		AppSecret = appSecret
-	} else {
-		log.Fatalln("APP_SECRET env variable is not set.")
+		log.Fatalln("CREDENTIALS env variable is not set.")
 	}
 }

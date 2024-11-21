@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/Stephen10121/planningcenterbackend/endpoints"
+	"github.com/Stephen10121/planningcenterbackend/event"
 	"github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/Stephen10121/planningcenterbackend/setup"
 	"github.com/pocketbase/pocketbase"
@@ -17,6 +18,18 @@ func main() {
 	initializers.SetupEnv()
 
 	pocketbase := pocketbase.New()
+
+	err := event.FetchEvents()
+
+	if err != nil {
+		pocketbase.Logger().Error(
+			"Failed to fetch data from the planning center api!",
+			"id", 123,
+			"error", err,
+		)
+	} else {
+		pocketbase.Logger().Info("Successfully fetch data from the planning center API.")
+	}
 
 	pocketbase.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.Renderer = &setup.Template{
