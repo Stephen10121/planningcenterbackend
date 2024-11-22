@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"os"
+	"time"
 
 	"github.com/Stephen10121/planningcenterbackend/endpoints"
 	"github.com/Stephen10121/planningcenterbackend/event"
@@ -19,7 +21,12 @@ func main() {
 
 	pocketbase := pocketbase.New()
 
-	err := event.FetchEvents()
+	start := time.Now()
+	events, err := event.FetchEvents()
+	elapsed := time.Since(start)
+
+	fmt.Println(events)
+	fmt.Printf("Function took %s\n", elapsed)
 
 	if err != nil {
 		pocketbase.Logger().Error(

@@ -1,0 +1,327 @@
+[
+    {
+        "type": "Resource",
+        "id": "373886",
+        "attributes": {
+            "created_at": "2018-12-04T05:23:35Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Food Table",
+            "path_name": "Kitchen",
+            "quantity": 10,
+            "serial_number": null,
+            "updated_at": "2024-10-25T16:50:41Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/373886"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "373887",
+        "attributes": {
+            "created_at": "2018-12-04T05:23:35Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Room",
+            "name": "Mt Hood Room",
+            "path_name": null,
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-05T09:56:08Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/373887"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "373889",
+        "attributes": {
+            "created_at": "2018-12-04T05:23:35Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Mobile Coffee Cart",
+            "path_name": "Kitchen",
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-07-17T18:13:27Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/373889"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "373890",
+        "attributes": {
+            "created_at": "2018-12-04T05:30:00Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Room",
+            "name": "Youth Room",
+            "path_name": null,
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-05T04:49:17Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/373890"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "373891",
+        "attributes": {
+            "created_at": "2018-12-04T05:34:37Z",
+            "description": "Video projector",
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Projector",
+            "path_name": "Technology /Visual",
+            "quantity": 2,
+            "serial_number": null,
+            "updated_at": "2024-10-30T01:40:50Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/373891"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "379052",
+        "attributes": {
+            "created_at": "2019-01-01T08:08:16Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Microphone",
+            "path_name": "Technology /Audio",
+            "quantity": 8,
+            "serial_number": null,
+            "updated_at": "2024-11-05T04:49:21Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/379052"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "560837",
+        "attributes": {
+            "created_at": "2021-12-09T03:47:07Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Live Feed",
+            "path_name": "Technology /Video",
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-09-10T03:41:25Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/560837"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "579030",
+        "attributes": {
+            "created_at": "2022-03-27T17:28:34Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Keyboard",
+            "path_name": "Technology /Audio",
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-05T04:49:19Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/579030"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "583161",
+        "attributes": {
+            "created_at": "2022-04-22T02:58:32Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Room",
+            "name": "Kitchen",
+            "path_name": null,
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-05T09:56:08Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/583161"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "583163",
+        "attributes": {
+            "created_at": "2022-04-22T03:05:16Z",
+            "description": "Local computer used to project to the screens.",
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Visual Computer",
+            "path_name": "Technology /Visual",
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-10-30T01:40:47Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/583163"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "583320",
+        "attributes": {
+            "created_at": "2022-04-23T17:57:28Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Room",
+            "name": "Sanctuary",
+            "path_name": null,
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-05T09:56:01Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/583320"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "586566",
+        "attributes": {
+            "created_at": "2022-05-13T04:43:15Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Room",
+            "name": "Prayer Room",
+            "path_name": null,
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-11-06T01:18:15Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/586566"
+        }
+    },
+    {
+        "type": "Resource",
+        "id": "643422",
+        "attributes": {
+            "created_at": "2023-04-03T02:33:39Z",
+            "description": null,
+            "expires_at": null,
+            "home_location": null,
+            "image": {
+                "url": null,
+                "thumb": {
+                    "url": null
+                }
+            },
+            "kind": "Resource",
+            "name": "Video Recording ",
+            "path_name": "Technology /Video",
+            "quantity": 1,
+            "serial_number": null,
+            "updated_at": "2024-10-25T14:03:48Z"
+        },
+        "links": {
+            "self": "https://api.planningcenteronline.com/calendar/v2/resources/643422"
+        }
+    }
+]
