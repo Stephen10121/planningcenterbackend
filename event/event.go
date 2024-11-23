@@ -13,33 +13,33 @@ import (
 )
 
 type EventTimes struct {
-	Name      string
-	StartTime string
-	EndTime   string
+	Name      string `json:"name"`
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
 }
 
 type ResourceType struct {
-	Id       string
-	Kind     string
-	Name     string
-	PathName string
+	Id       string `json:"id"`
+	Kind     string `json:"kind"`
+	Name     string `json:"name"`
+	PathName string `json:"path_name"`
 }
 
 type TagsType struct {
-	Color string
-	Name  string
-	Id    string
+	Color string `json:"color"`
+	Name  string `json:"name"`
+	Id    string `json:"id"`
 }
 
 type EventType struct {
-	InstanceId string
-	StartTime  string
-	EndTime    string
-	Name       string
-	Location   string
-	Times      []EventTimes
-	Resources  []ResourceType
-	Tags       []TagsType
+	InstanceId string         `json:"instanceId"`
+	StartTime  string         `json:"startTime"`
+	EndTime    string         `json:"endTime"`
+	Name       string         `json:"name"`
+	Location   string         `json:"location"`
+	Times      []EventTimes   `json:"times"`
+	Resources  []ResourceType `json:"resources"`
+	Tags       []TagsType     `json:"tags"`
 }
 
 func str(num int) string {
