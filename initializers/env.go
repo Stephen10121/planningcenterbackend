@@ -3,8 +3,6 @@ package initializers
 import (
 	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 var Password string
@@ -12,8 +10,6 @@ var Credentials string
 var ResourcesJsonFilePath string
 
 func SetupEnv() {
-	envFile, _ := godotenv.Read(".env")
-
 	calPassword := os.Getenv("CAL_PASSWORD")
 
 	if len(calPassword) != 0 {
@@ -22,7 +18,7 @@ func SetupEnv() {
 		log.Fatalln("CAL_PASSWORD env variable is not set.")
 	}
 
-	cred := envFile["CREDENTIALS"]
+	cred := os.Getenv("CREDENTIALS")
 
 	if len(cred) != 0 {
 		Credentials = cred
@@ -30,7 +26,7 @@ func SetupEnv() {
 		log.Fatalln("CREDENTIALS env variable is not set.")
 	}
 
-	resFile := envFile["RESOURCESFILE"]
+	resFile := os.Getenv("RESOURCESFILE")
 	if len(resFile) != 0 {
 		ResourcesJsonFilePath = resFile
 	} else {
