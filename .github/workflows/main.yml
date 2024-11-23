@@ -1,4 +1,4 @@
-name: Docker Build Cal App
+name: Docker Build Planning Center App
 
 on:
     push:
