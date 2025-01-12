@@ -26,7 +26,7 @@ func main() {
 			fmt.Println("Endpoint hit")
 			fmt.Println(c.Request.Body)
 			return c.JSON(200, map[string]string{
-				"msg": "All Good",
+				"msg": "All Good!",
 			})
 		})
 		e.Router.GET("/test", func(c *core.RequestEvent) error {
