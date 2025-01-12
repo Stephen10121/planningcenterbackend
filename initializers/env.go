@@ -7,7 +7,6 @@ import (
 
 var Password string
 var Credentials string
-var ResourcesJsonFilePath string
 
 func SetupEnv() {
 	calPassword := os.Getenv("CAL_PASSWORD")
@@ -24,12 +23,5 @@ func SetupEnv() {
 		Credentials = cred
 	} else {
 		log.Fatalln("CREDENTIALS env variable is not set.")
-	}
-
-	resFile := os.Getenv("RESOURCESFILE")
-	if len(resFile) != 0 {
-		ResourcesJsonFilePath = resFile
-	} else {
-		log.Fatalln("RESOURCESFILE env variable is not set.")
 	}
 }

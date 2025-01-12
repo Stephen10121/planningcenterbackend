@@ -347,6 +347,32 @@ type ResourceJsonType struct {
 	Links map[string]any `json:"links"`
 }
 
+func NewEventFetcher() {
+	year, month, day := time.Now().Add(-72 * time.Hour).Date()
+	req, err := http.NewRequest(
+		http.MethodGet,
+		"https://api.planningcenteronline.com/calendar/v2/event_instances?include=event%2Cevent_times%2Cresource_bookings%2Ctags&order=starts_at&where[starts_at][gt]="+str(year)+"-"+str(int(month))+"-"+str(day),
+		nil,
+	)
+	req.Header.Add("Authorization", "Basic "+initializers.Credentials+"==")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(string(resBody))
+}
+
 func FetchEvents() ([]EventType, error) {
 	plan, _ := os.ReadFile("./resources.json")
 	var resourcesMap []ResourceJsonType

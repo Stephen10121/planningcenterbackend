@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "encoding/json"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,20 +9,34 @@ import (
 
 	"github.com/Stephen10121/planningcenterbackend/event"
 	"github.com/Stephen10121/planningcenterbackend/initializers"
-	"github.com/labstack/echo/v5"
+
+	// "github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/models"
+	// "github.com/pocketbase/pocketbase/models"
 )
 
 func main() {
 	initializers.SetupEnv()
-	pocketbase := pocketbase.New()
+	base := pocketbase.New()
 
-	pocketbase.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		e.Router.GET("/events", func(c echo.Context) error {
-			auth := c.Request().Header.Get("Authorization")
+	base.OnServe().BindFunc(func(e *core.ServeEvent) error {
+		e.Router.POST("/webhook", func(c *core.RequestEvent) error {
+			fmt.Println("Endpoint hit")
+			fmt.Println(c.Request.Body)
+			return c.JSON(200, map[string]string{
+				"msg": "All Good",
+			})
+		})
+		e.Router.GET("/test", func(c *core.RequestEvent) error {
+			event.NewEventFetcher()
+			return c.JSON(200, map[string]string{
+				"msg": "All Good",
+			})
+		})
+		e.Router.GET("/events", func(c *core.RequestEvent) error {
+			auth := c.Request.Header.Get("Authorization")
 
 			if auth != "Basic "+initializers.Credentials+"==" {
 				return c.JSON(401, map[string]string{
@@ -30,12 +45,15 @@ func main() {
 			}
 			d := time.Now().Add(-72 * time.Hour)
 
-			records, err := pocketbase.Dao().FindRecordsByExpr("events",
+			records, err := base.FindAllRecords("events",
 				dbx.NewExp("startTime >= {:filterDate}", dbx.Params{"filterDate": d}),
 			)
+			// records, err := base.Dao().FindRecordsByExpr("events",
+			// 	dbx.NewExp("startTime >= {:filterDate}", dbx.Params{"filterDate": d}),
+			// )
 
 			if err != nil {
-				pocketbase.Logger().Error(
+				base.Logger().Error(
 					"Failed to fetch events!",
 					"id", 123,
 					"error", err,
@@ -83,7 +101,7 @@ func main() {
 			return c.JSON(200, events)
 		})
 
-		return nil
+		return e.Next()
 	})
 
 	ticker := time.NewTicker(60 * time.Second)
@@ -97,16 +115,16 @@ func main() {
 				events, err := event.FetchEvents()
 
 				if err != nil {
-					pocketbase.Logger().Error(
+					base.Logger().Error(
 						"Failed to fetch data from the planning center api!",
 						"id", 123,
 						"error", err,
 					)
 				}
 
-				collection, err := pocketbase.Dao().FindCollectionByNameOrId("events")
+				collection, err := base.FindCollectionByNameOrId("events")
 				if err != nil {
-					pocketbase.Logger().Warn("Create the users collection to save the data fetched from the planning center api!")
+					base.Logger().Warn("Create the users collection to save the data fetched from the planning center api!")
 					continue
 				}
 
@@ -126,10 +144,10 @@ func main() {
 						continue
 					}
 
-					existingRecord, err := pocketbase.Dao().FindRecordById("events", events[i].InstanceId)
+					existingRecord, err := base.FindRecordById("events", events[i].InstanceId)
 
 					if err != nil {
-						record := models.NewRecord(collection)
+						record := core.NewRecord(collection)
 						record.Set("id", events[i].InstanceId)
 						record.Set("startTime", events[i].StartTime)
 						record.Set("endTime", events[i].EndTime)
@@ -139,7 +157,7 @@ func main() {
 						record.Set("resources", resources)
 						record.Set("tags", tags)
 
-						if err := pocketbase.Dao().SaveRecord(record); err != nil {
+						if err := base.Save(record); err != nil {
 							fmt.Println(err)
 							continue
 						}
@@ -152,7 +170,7 @@ func main() {
 						existingRecord.Set("resources", resources)
 						existingRecord.Set("tags", tags)
 
-						if err := pocketbase.Dao().SaveRecord(existingRecord); err != nil {
+						if err := base.Save(existingRecord); err != nil {
 							fmt.Println(err)
 							continue
 						}
@@ -167,7 +185,7 @@ func main() {
 
 	defer close(quit)
 
-	if err := pocketbase.Start(); err != nil {
+	if err := base.Start(); err != nil {
 		log.Fatal(err)
 	}
 }
