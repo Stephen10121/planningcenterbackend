@@ -1,93 +1,99 @@
 package endpoints
 
 import (
-	"net/http"
+	"fmt"
 	"time"
 
 	"github.com/Stephen10121/planningcenterbackend/event"
 	"github.com/Stephen10121/planningcenterbackend/initializers"
-	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/dbx"
+	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/core"
 )
 
-func LoginGetEndpoint(c echo.Context) error {
-	password, err := c.Cookie("password")
-
-	if err != nil {
-		return c.Render(http.StatusOK, "login", map[string]interface{}{})
-	}
-
-	if password.Value == initializers.Password {
-		return c.Redirect(301, "/")
-	}
-
-	return c.Render(http.StatusOK, "login", map[string]interface{}{})
-}
-
-func LoginPostEndpoint(c echo.Context) error {
-	password := c.FormValue("password")
-	if password != initializers.Password {
-		return c.Render(http.StatusOK, "login", map[string]interface{}{
-			"Error": "Invalid Password!",
+func WebhookTest(e *core.ServeEvent) {
+	e.Router.POST("/webhook", func(c *core.RequestEvent) error {
+		fmt.Println("Endpoint hit")
+		fmt.Println(c.Request.Body)
+		return c.JSON(200, map[string]string{
+			"msg": "All Good!",
 		})
-	}
-
-	cookie := new(http.Cookie)
-	cookie.Name = "password"
-	cookie.Value = password
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-
-	c.SetCookie(cookie)
-	return c.Redirect(301, "/")
+	})
 }
 
-func LogoutGetEndpoint(c echo.Context) error {
-	cookie := &http.Cookie{
-		Name:    "password",
-		Value:   "",
-		Path:    "/",
-		Expires: time.Unix(0, 0),
-	}
-	c.SetCookie(cookie)
-	return c.Redirect(301, "/login")
+func TestEndpoint(e *core.ServeEvent) {
+	e.Router.GET("/test", func(c *core.RequestEvent) error {
+		event.NewEventFetcher()
+		return c.JSON(200, map[string]string{
+			"msg": "All Good",
+		})
+	})
 }
 
-func MainGetEndpoint(c echo.Context) error {
-	password, err := c.Cookie("password")
+func GetEvents(e *core.ServeEvent, base *pocketbase.PocketBase) {
+	e.Router.GET("/events", func(c *core.RequestEvent) error {
+		auth := c.Request.Header.Get("Authorization")
 
-	if err != nil {
-		return c.Redirect(301, "/login")
-	}
+		if auth != "Basic "+initializers.Credentials+"==" {
+			return c.JSON(401, map[string]string{
+				"error": "Invalid Credentials",
+			})
+		}
+		d := time.Now().Add(-72 * time.Hour)
 
-	if password.Value != initializers.Password {
-		return c.Redirect(301, "/login")
-	}
+		records, err := base.FindAllRecords("events",
+			dbx.NewExp("startTime >= {:filterDate}", dbx.Params{"filterDate": d}),
+		)
+		// records, err := base.Dao().FindRecordsByExpr("events",
+		// 	dbx.NewExp("startTime >= {:filterDate}", dbx.Params{"filterDate": d}),
+		// )
 
-	event.FetchEvents()
-	//Test data. Will change later.
-	events := []event.EventType{
-		{
-			InstanceId: "123",
-			StartTime:  "string",
-			EndTime:    "string",
-			Name:       "string",
-			Location:   "string",
-			Times:      []event.EventTimes{},
-			Resources:  []event.ResourceType{},
-			Tags:       []event.TagsType{},
-		},
-		{
-			InstanceId: "124",
-			StartTime:  "string",
-			EndTime:    "string",
-			Name:       "string",
-			Location:   "string",
-			Times:      []event.EventTimes{},
-			Resources:  []event.ResourceType{},
-			Tags:       []event.TagsType{},
-		},
-	}
+		if err != nil {
+			base.Logger().Error(
+				"Failed to fetch events!",
+				"id", 123,
+				"error", err,
+			)
+			return c.String(500, "Failed to fetch events from the database.")
+		}
 
-	return c.Render(http.StatusOK, "index", map[string]interface{}{
-		"Events": events,
+		events := []event.EventType{}
+
+		for i := 0; i < len(records); i++ {
+			var times []event.EventTimes
+			var resources []event.ResourceType
+			var tags []event.TagsType
+
+			err := records[i].UnmarshalJSONField("times", &times)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			err = records[i].UnmarshalJSONField("resources", &resources)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			err = records[i].UnmarshalJSONField("tags", &tags)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+
+			events = append(events, event.EventType{
+				InstanceId: records[i].Id,
+				StartTime:  records[i].GetString("startTime"),
+				EndTime:    records[i].GetString("endTime"),
+				Name:       records[i].GetString("name"),
+				Location:   records[i].GetString("location"),
+				Times:      times,
+				Resources:  resources,
+				Tags:       tags,
+			})
+		}
+
+		return c.JSON(200, events)
 	})
 }

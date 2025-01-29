@@ -7,6 +7,7 @@ import (
 
 var Password string
 var Credentials string
+var ResendKey string
 
 func SetupEnv() {
 	calPassword := os.Getenv("CAL_PASSWORD")
@@ -23,5 +24,13 @@ func SetupEnv() {
 		Credentials = cred
 	} else {
 		log.Fatalln("CREDENTIALS env variable is not set.")
+	}
+
+	resend := os.Getenv("RESEND_KEY")
+
+	if len(cred) != 0 {
+		ResendKey = resend
+	} else {
+		log.Fatalln("RESEND_KEY env variable is not set.")
 	}
 }
