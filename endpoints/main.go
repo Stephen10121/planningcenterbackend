@@ -160,8 +160,10 @@ func UserHasSubscribed(e *core.ServeEvent, base *pocketbase.PocketBase) {
 			"calendar.v2.events.event_request.destroyed",
 		}
 
+		createdWebhooks := []functions.CreateWebhookReturn{}
+
 		for _, webhook := range webhooksNeeded {
-			err = functions.CreateWebhook(
+			resp, err := functions.CreateWebhook(
 				webhook,
 				"https://calapi.stephengruzin.dev/tester",
 				tok,
@@ -173,6 +175,23 @@ func UserHasSubscribed(e *core.ServeEvent, base *pocketbase.PocketBase) {
 					"msg": "Failed to add a webhook!",
 				})
 			}
+
+			createdWebhooks = append(createdWebhooks, resp)
+		}
+
+		createdWebhooksJson, err := json.Marshal(createdWebhooks)
+		if err != nil {
+			return c.JSON(400, map[string]string{
+				"msg": "Failed to jsonify the webhooks!",
+			})
+		}
+
+		record.Set("webhooks", createdWebhooksJson)
+
+		if err := base.Save(record); err != nil {
+			return c.JSON(400, map[string]string{
+				"msg": "Failed to save the webhooks in the database.",
+			})
 		}
 
 		return c.JSON(200, map[string]string{
