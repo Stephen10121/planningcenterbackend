@@ -8,6 +8,8 @@ import (
 var Password string
 var Credentials string
 var ResendKey string
+var PlanningCenterClientId string
+var PlanningCenterClientSecret string
 
 func SetupEnv() {
 	calPassword := os.Getenv("CAL_PASSWORD")
@@ -32,5 +34,21 @@ func SetupEnv() {
 		ResendKey = resend
 	} else {
 		log.Fatalln("RESEND_KEY env variable is not set.")
+	}
+
+	clientId := os.Getenv("PLANNINGCENTER_CLIENT_ID")
+
+	if len(cred) != 0 {
+		PlanningCenterClientId = clientId
+	} else {
+		log.Fatalln("PLANNINGCENTER_CLIENT_ID env variable is not set.")
+	}
+
+	clientSecret := os.Getenv("PLANNINGCENTER_CLIENT_SECRET")
+
+	if len(cred) != 0 {
+		PlanningCenterClientSecret = clientSecret
+	} else {
+		log.Fatalln("PLANNINGCENTER_CLIENT_SECRET env variable is not set.")
 	}
 }

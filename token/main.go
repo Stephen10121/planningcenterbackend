@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/pocketbase/pocketbase"
 )
 
@@ -29,8 +30,8 @@ func RefreshTheAuthToken(userId string, base *pocketbase.PocketBase) (string, er
 	}
 
 	data := map[string]string{
-		"client_id":     "a43d0cc3974d32cc7e2181849b393ee8e127eebedf72c1056e54e13c95af568f",
-		"client_secret": "pco_app_c479e2122b4a181b535e3a9dec7ad309b668b1ccd56c89371616918f04d75b9c4c6fa23e",
+		"client_id":     initializers.PlanningCenterClientId,
+		"client_secret": initializers.PlanningCenterClientSecret,
 		"refresh_token": record.GetString("refreshToken"),
 		"grant_type":    "refresh_token",
 	}
