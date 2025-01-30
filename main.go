@@ -19,6 +19,7 @@ func main() {
 		endpoints.WebhookTest(e)
 		endpoints.TestEndpoint(e)
 		endpoints.GetEvents(e, base)
+		endpoints.UserHasSubscribed(e, base)
 
 		return e.Next()
 	})

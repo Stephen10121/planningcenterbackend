@@ -1,11 +1,16 @@
 package endpoints
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+
 	"time"
 
 	"github.com/Stephen10121/planningcenterbackend/event"
+	"github.com/Stephen10121/planningcenterbackend/functions"
 	"github.com/Stephen10121/planningcenterbackend/initializers"
+	"github.com/Stephen10121/planningcenterbackend/token"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
@@ -95,5 +100,83 @@ func GetEvents(e *core.ServeEvent, base *pocketbase.PocketBase) {
 		}
 
 		return c.JSON(200, events)
+	})
+}
+
+type UserSubscribedBody struct {
+	Id          string `json:"id"`
+	AccessToken string `json:"accessToken"`
+}
+
+func UserHasSubscribed(e *core.ServeEvent, base *pocketbase.PocketBase) {
+	e.Router.POST("/userSubscribed", func(c *core.RequestEvent) error {
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			return c.JSON(500, map[string]string{
+				"msg": "Failed to read the body!",
+			})
+		}
+
+		bodyStruct := UserSubscribedBody{}
+		err = json.Unmarshal(body, &bodyStruct)
+		if err != nil {
+			return c.JSON(500, map[string]string{
+				"msg": "Failed to read the body!",
+			})
+		}
+
+		if len(bodyStruct.Id) == 0 || len(bodyStruct.AccessToken) == 0 {
+			return c.JSON(400, map[string]string{
+				"msg": "Missing data in the body!",
+			})
+		}
+
+		record, err := base.FindRecordById("users", bodyStruct.Id)
+		if err != nil {
+			return c.JSON(401, map[string]string{
+				"msg": "Unauthorized!",
+			})
+		}
+
+		if record.GetString("authToken") != bodyStruct.AccessToken {
+			return c.JSON(401, map[string]string{
+				"msg": "Unauthorized!",
+			})
+		}
+
+		tok, err := token.RefreshTheAuthToken(record.Id, base)
+
+		if err != nil {
+			fmt.Println(err)
+			return c.JSON(400, map[string]string{
+				"msg": "Failed to refresh the token!",
+			})
+		}
+
+		webhooksNeeded := []string{
+			"calendar.v2.events.event_request.approved",
+			"calendar.v2.events.event_request.updated",
+			"calendar.v2.events.event_request.created",
+			"calendar.v2.events.event_request.destroyed",
+		}
+
+		for _, webhook := range webhooksNeeded {
+			err = functions.CreateWebhook(
+				webhook,
+				"https://calapi.stephengruzin.dev/tester",
+				tok,
+			)
+
+			if err != nil {
+				fmt.Println(err)
+				return c.JSON(400, map[string]string{
+					"msg": "Failed to add a webhook!",
+				})
+			}
+		}
+
+		return c.JSON(200, map[string]string{
+			"msg": "ok",
+		})
 	})
 }
