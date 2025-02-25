@@ -28,9 +28,27 @@ func WebhookTest(e *core.ServeEvent) {
 
 func TestEndpoint(e *core.ServeEvent) {
 	e.Router.GET("/test", func(c *core.RequestEvent) error {
-		event.NewEventFetcher()
+		newResp, err := event.EventFetcher("Basic " + initializers.Credentials + "==")
+		if err != nil {
+			fmt.Println(err)
+			return c.JSON(500, map[string]string{
+				"msg":  "Not all Good",
+				"resp": err.Error(),
+			})
+		}
+
+		newRespJSON, err := json.Marshal(newResp)
+		if err != nil {
+			fmt.Println(err)
+			return c.JSON(500, map[string]string{
+				"msg":  "Not all Good",
+				"resp": err.Error(),
+			})
+		}
+
 		return c.JSON(200, map[string]string{
-			"msg": "All Good",
+			"msg":     "All Good",
+			"newresp": string(newRespJSON),
 		})
 	})
 }
@@ -39,7 +57,7 @@ func GetEvents(e *core.ServeEvent, base *pocketbase.PocketBase) {
 	e.Router.GET("/events", func(c *core.RequestEvent) error {
 		auth := c.Request.Header.Get("Authorization")
 
-		if auth != "Basic "+initializers.Credentials+"==" {
+		if auth != "Basic "+initializers.Credentials {
 			return c.JSON(401, map[string]string{
 				"error": "Invalid Credentials",
 			})
@@ -62,12 +80,12 @@ func GetEvents(e *core.ServeEvent, base *pocketbase.PocketBase) {
 			return c.String(500, "Failed to fetch events from the database.")
 		}
 
-		events := []event.EventType{}
+		events := []event.Event{}
 
 		for i := 0; i < len(records); i++ {
-			var times []event.EventTimes
-			var resources []event.ResourceType
-			var tags []event.TagsType
+			var times []event.SpecificEventTimes
+			var resources []event.Resource
+			var tags []event.EventTag
 
 			err := records[i].UnmarshalJSONField("times", &times)
 			if err != nil {
@@ -87,7 +105,7 @@ func GetEvents(e *core.ServeEvent, base *pocketbase.PocketBase) {
 				continue
 			}
 
-			events = append(events, event.EventType{
+			events = append(events, event.Event{
 				InstanceId: records[i].Id,
 				StartTime:  records[i].GetString("startTime"),
 				EndTime:    records[i].GetString("endTime"),

@@ -7,6 +7,7 @@ import (
 
 	"github.com/Stephen10121/planningcenterbackend/email"
 	"github.com/Stephen10121/planningcenterbackend/event"
+	"github.com/Stephen10121/planningcenterbackend/initializers"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -14,7 +15,7 @@ import (
 func UpdateEvents(base *pocketbase.PocketBase) bool {
 	fmt.Println("[server] Fetching events from planning center.")
 
-	events, err := event.FetchEvents()
+	events, err := event.EventFetcher("Basic " + initializers.Credentials + "==")
 
 	if err != nil {
 		base.Logger().Error(
